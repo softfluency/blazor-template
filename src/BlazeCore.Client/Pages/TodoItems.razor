@@ -1,0 +1,45 @@
+﻿@page "/todo-items"
+@using BlazeCore.Shared.TodoItem
+@inject HttpClient Http
+
+<PageTitle>Todo Items</PageTitle>
+
+<h1>Todo Items</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (_items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Created at</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in _items)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.CreatedAt.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private TodoItemResponse[]? _items;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _items = await Http.GetFromJsonAsync<TodoItemResponse[]>("api/todo-items");
+    }
+}
