@@ -27,7 +27,12 @@ public class TodoItemController : ControllerBase
     public async Task<IActionResult> CreateTodoItem(TodoItemRequest request)
     {
         string todoItemId = await _mediator
-            .Send(new CreateTodoItem.Command(request.Name, request.Description, request.CreatedAt));
+            .Send(new CreateTodoItem.Command
+            {
+                Name = request.Name,
+                Description = request.Description,
+                CreatedAt = request.CreatedAt
+            });
         return Ok(todoItemId);
     }
 }

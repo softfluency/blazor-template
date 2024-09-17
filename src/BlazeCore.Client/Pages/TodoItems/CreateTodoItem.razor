@@ -1,0 +1,60 @@
+﻿@page "/todo-items/add"
+@using BlazeCore.Shared.TodoItem
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Add Todo Item</PageTitle>
+
+<h1>Add Todo Item</h1>
+
+<EditForm class="settings-form" Model="@_todoItem">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label for="setting-input-1" class="form-label">Name</label>
+                <InputText type="text" class="form-control" id="setting-input-1" @bind-Value="@_todoItem.Name" required/>
+            </div>
+            <div class="mb-3">
+                <label for="setting-input-2" class="form-label">Description</label>
+                <InputText type="text" class="form-control" id="setting-input-2" @bind-Value="@_todoItem.Description" required/>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="mb-3">
+                <label for="setting-input-3" class="form-label">Date</label>
+                <InputDate class="form-control" id="setting-input-3" @bind-Value="@_todoItem.CreatedAt" @bind-Value:format="dd/MM/yyyy" required/>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<hr class="my-4">
+<div class="row justify-content-between">
+    <div class="col-auto">
+        <a class="btn app-btn-primary" href="javascript:void(0);" @onclick="Create">Save</a>
+    </div>
+    <div class="col-auto">
+        <a class="btn app-btn-secondary" href="javascript:void(0);" @onclick="Cancel">Cancel</a>
+    </div>
+</div>
+<hr class="my-4">
+
+@code {
+    
+    TodoItemRequest _todoItem = new();
+
+    async Task Create()
+    {
+        var result = await Http.PostAsJsonAsync("api/todo-items", _todoItem);
+
+        if (result.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("/todo-items");
+        }
+    }
+    
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("/todo-items");
+    }
+}

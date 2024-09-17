@@ -6,7 +6,12 @@ namespace BlazeCore.Server.Features;
 
 public class CreateTodoItem
 {
-    public record Command(string Name, string Description, DateTime CreatedAt) : ITodoItem, IRequest<string>;
+    public record Command : ITodoItem, IRequest<string>
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
     
     public class Validator : TodoItemValidator<Command>
     {
