@@ -1,3 +1,4 @@
+using BlazeCore.Server.Infrastructure;
 using BlazeCore.Server.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddTransient<ITodoItemRepository, InMemoryTodoItemRepository>();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,6 +26,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseWebAssemblyDebugging();
 }
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
