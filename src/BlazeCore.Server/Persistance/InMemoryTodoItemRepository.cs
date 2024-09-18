@@ -12,8 +12,20 @@ public class InMemoryTodoItemRepository : ITodoItemRepository
         return Task.CompletedTask;
     }
 
+    public Task UpdateAsync(TodoItem todoItem)
+    {
+        TodoItems.RemoveAll(x => x.Id == todoItem.Id);
+        TodoItems.Add(todoItem);
+        return Task.CompletedTask;
+    }
+
     public Task<List<TodoItem>> GetAllAsync()
     {
         return Task.FromResult(TodoItems);
+    }
+
+    public Task<TodoItem> FindAsync(string id)
+    {
+        return Task.FromResult(TodoItems.FirstOrDefault(x => x.Id == id));
     }
 }

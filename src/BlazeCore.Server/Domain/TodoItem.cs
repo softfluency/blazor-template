@@ -18,6 +18,13 @@ public sealed class TodoItem
 
     public DateTime CreatedAt { get; private set; }
     
+    public void Update(string name, string description, DateTime createdAt)
+    {
+        Name = name;
+        Description = description;
+        CreatedAt = createdAt;
+    }
+    
     public static TodoItem Create(string id, string name, string description, DateTime createdAt)
     {
         return new TodoItem(id, name, description, createdAt);

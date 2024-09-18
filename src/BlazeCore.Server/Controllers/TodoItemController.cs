@@ -23,6 +23,14 @@ public class TodoItemController : ControllerBase
         return Ok(todoItems);
     }
     
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> FindById(string id)
+    {
+        TodoItemResponse todoItem = await _mediator.Send(new FindTodoItem.Query(id));
+        return Ok(todoItem);
+    }
+    
     [HttpPost]
     public async Task<IActionResult> CreateTodoItem(TodoItemRequest request)
     {
@@ -33,6 +41,21 @@ public class TodoItemController : ControllerBase
                 Description = request.Description,
                 CreatedAt = request.CreatedAt
             });
+        return Ok(todoItemId);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateTodoItem(TodoItemRequest request)
+    {
+        string todoItemId = await _mediator
+            .Send(new UpdateTodoItem.Command
+            {
+                Id = request.Id,
+                Name = request.Name,
+                Description = request.Description,
+                CreatedAt = request.CreatedAt
+            });
+
         return Ok(todoItemId);
     }
 }
