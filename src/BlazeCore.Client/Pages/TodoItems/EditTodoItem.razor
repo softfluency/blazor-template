@@ -1,4 +1,4 @@
-﻿@page "/todo-items/add"
+﻿@page "/todo-items/edit/{id}"
 @using BlazeCore.Shared.TodoItem
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -31,7 +31,7 @@
 <hr class="my-4">
 <div class="row justify-content-end">
     <div class="col-auto">
-        <a class="btn btn-primary" href="javascript:void(0);" @onclick="Create">Save</a>
+        <a class="btn btn-primary" href="javascript:void(0);" @onclick="Update">Save</a>
     </div>
     <div class="col-auto">
         <a class="btn btn-secondary" href="javascript:void(0);" @onclick="Cancel">Cancel</a>
@@ -39,12 +39,26 @@
 </div>
 
 @code {
-    
+    [Parameter]
+    public string id { get; set; }
     TodoItemRequest _todoItem = new();
+    TodoItemResponse _todoItemResponse;
 
-    async Task Create()
+    protected override async Task OnInitializedAsync()
     {
-        var result = await Http.PostAsJsonAsync("api/todo-items", _todoItem);
+        _todoItemResponse = await Http.GetFromJsonAsync<TodoItemResponse>($"api/todo-items/{id}");
+        _todoItem = new TodoItemRequest()
+        {
+            Id = _todoItemResponse.Id,
+            Name = _todoItemResponse.Name,
+            Description = _todoItemResponse.Description,
+            CreatedAt = _todoItemResponse.CreatedAt
+        };
+    }
+
+    async Task Update()
+    {
+        var result = await Http.PutAsJsonAsync("api/todo-items", _todoItem);
 
         if (result.IsSuccessStatusCode)
         {
