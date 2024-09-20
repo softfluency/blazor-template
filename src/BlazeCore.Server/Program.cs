@@ -1,5 +1,8 @@
 using BlazeCore.Server.Infrastructure;
+using BlazeCore.Server.Infrastructure.Mediatr;
 using BlazeCore.Server.Persistance;
+using FluentValidation;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +15,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
+
+builder.Services.Scan(
+    x =>
+    {
+        x.FromAssemblies(typeof(Program).Assembly)
+            .AddClasses(classes => classes.AssignableTo(typeof(AbstractValidator<>)))
+            .AsImplementedInterfaces()
+            .WithScopedLifetime();
+    });
+
 builder.Services.AddTransient<ITodoItemRepository, InMemoryTodoItemRepository>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

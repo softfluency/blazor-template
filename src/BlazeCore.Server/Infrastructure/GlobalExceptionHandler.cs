@@ -23,7 +23,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         switch (exception)
         {
-            /*case AuthenticationException:
+            case AuthenticationException:
                 problemDetails.Status = StatusCodes.Status401Unauthorized;
                 problemDetails.Title = "Unauthorized";
                 problemDetails.Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1";
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler : IExceptionHandler
                 problemDetails.Extensions["errors"] = MapValidationErrors(ex);;
                 
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-                break;*/
+                break;
             case NotFoundException ex:
                 problemDetails.Status = StatusCodes.Status404NotFound;
                 problemDetails.Title = "The requested resource was not found.";
@@ -74,7 +74,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         return true;
     }
 
-    /*private static Dictionary<string, string[]> MapValidationErrors(ValidationException ex)
+    private static Dictionary<string, string[]> MapValidationErrors(ValidationException ex)
     {
         var errors = new Dictionary<string, string[]>();
         foreach (var error in ex.Errors)
@@ -92,5 +92,5 @@ public class GlobalExceptionHandler : IExceptionHandler
         }
 
         return errors;
-    }*/
+    }
 }
