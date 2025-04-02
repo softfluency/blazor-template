@@ -1,16 +1,52 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <div class="sidebar">
+
+@* Required *@
+<MudThemeProvider Theme="_myTheme" />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
+        <MudDrawerHeader>
+            <MudIcon Size="Size.Large" Icon="@Icons.Custom.Brands.MudBlazor" />
+            <MudText Typo="Typo.h5" Class="mt-1 ml-2">Blaise</MudText>
+        </MudDrawerHeader>
         <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+    </MudDrawer>
+    <MudMainContent>
+        <MudPaper Elevation="0" Class="pa-2">
             @Body
-        </article>
-    </main>
-</div>
+        </MudPaper>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private MudTheme _myTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = "#3b4d61", // Tamno sivo-plava
+                Secondary = "#6b7b8c", // Svetlo siva sa plavim tonom
+                AppbarBackground = "#3b4d61" // Promena boje hedera
+            },
+            PaletteDark = new PaletteDark()
+        };
+}
